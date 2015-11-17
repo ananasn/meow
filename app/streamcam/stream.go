@@ -3,7 +3,7 @@ package streamcam
 import(
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"
-    "github.com/lazywei/go-opencv/opencv"
+	"github.com/lazywei/go-opencv/opencv"
 	"encoding/base64"
 	"os"
 	"io"
@@ -32,7 +32,7 @@ func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
 			//fmt.Println(size)
 		
 			opencv.SaveImage("frame.jpg", frame, 0)
-			img, _:= os.Open("frame.jpg")
+			img, _ := os.Open("frame.jpg")
 			stats, _ := img.Stat()
 			size := stats.Size()
 			imgbuf := make([]byte, 0)
