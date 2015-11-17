@@ -12,6 +12,9 @@ import(
 
 func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
 	revel.INFO.Printf("%s", "IN GOROUTINE")
+	capture := opencv.NewCameraCapture(0)
+	defer capture.Release()
+	revel.INFO.Printf("%s", "CAPTURE DONE")
 	ticker := time.NewTicker(time.Millisecond * 10).C
 	for{
 		select {
@@ -19,9 +22,6 @@ func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
 			revel.INFO.Printf("%s", "STOP GOROUTINE")
 			return
 		case <- ticker:
-			capture := opencv.NewCameraCapture(0)
-			defer capture.Release()
-			revel.INFO.Printf("%s", "CAPTURE DONE")
 			frame := capture.QueryFrame()
 		
 			//эта штука не работает
