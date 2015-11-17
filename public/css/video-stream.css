@@ -1,0 +1,65 @@
+.video-stream{
+    position: relative;
+    width: 300;
+    height: 250;
+}
+
+.panel-bottom {
+    position: absolute;
+    bottom: 0px;
+    width: inherit;
+    height: 10%;
+    display: block;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.panel-top {
+    position: absolute;
+    top: 0px;
+    width: inherit;
+    height: 10%;
+    display: block;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.video-stream:hover .panel-bottom,
+.video-stream:hover .panel-top {
+    max-height: 500px;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0.6;
+}
+
+.video-stream img {
+    position: absolute;
+    bottom: 0px;
+    width: inherit;
+    height: inherit;
+}
+
+.video-stream .info-lbl {
+    position: absolute;
+    right: 0px;
+}
+
+.pause-btn {
+    position: absolute;
+    color: white;
+    background-color: Transparent;
+    border-color: Transparent;
+    outline:none;
+    left: 48%;
+    transition: all 0.5s ease-in-out;
+}
+
+.video-stream:hover .pause-btn {
+    color: white;
+    background-color: Transparent;
+    border-color: Transparent;
+    outline:none;
+    position: absolute;
+    left: 48%;
+}
