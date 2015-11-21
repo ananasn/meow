@@ -8,20 +8,23 @@ import(
 	"os"
 	"io"
 	"time"
+	"runtime"
 )
 
 func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
-	revel.INFO.Printf("%s", "IN GOROUTINE")
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+	revel.INFO.Printf("%s", "Try capture")
 	capture := opencv.NewCameraCapture(0)
 	defer capture.Release()
-	revel.INFO.Printf("%s", "CAPTURE DONE")
-	ticker := time.NewTicker(time.Millisecond * 10).C
+	revel.INFO.Printf("%s", "Capture done")
+	ticker := time.NewTicker(time.Millisecond * 10)
 	for{
 		select {
 		case <- quit:
-			revel.INFO.Printf("%s", "STOP GOROUTINE")
+			revel.INFO.Printf("%s", "Goroutine closed")
 			return
-		case <- ticker:
+		case <- ticker.C:
 			frame := capture.QueryFrame()
 		
 			//эта штука не работает
@@ -47,8 +50,11 @@ func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
 			}
 
 			result := "data:image/jpg;base64," + base64.StdEncoding.EncodeToString(imgbuf)
-			websocket.Message.Send(ws, &result)
-			
+			err := websocket.Message.Send(ws, result)	
+			if err != nil {
+				ticker.Stop()
+				revel.INFO.Printf("%s %s", "ERROR:", err)
+			}
 		}
 	}
 }
