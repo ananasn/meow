@@ -1,6 +1,6 @@
 package streamcam
 
-import(
+import (
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"
 	"github.com/lazywei/go-opencv/opencv"
@@ -8,18 +8,14 @@ import(
 	"os"
 	"io"
 	"time"
-	"runtime"
 )
 
-func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
-	runtime.LockOSThread()
-	defer runtime.UnlockOSThread()
-	revel.INFO.Printf("%s", "Try capture")
-	capture := opencv.NewCameraCapture(0)
-	defer capture.Release()
-	revel.INFO.Printf("%s", "Capture done")
+func StreamVideo(ws *websocket.Conn, quit chan struct{}, capturechan chan *opencv.Capture) {
+	revel.INFO.Printf("%s", "Access capture")
+	capture := <-capturechan
+	capturechan <- capture
 	ticker := time.NewTicker(time.Millisecond * 10)
-	for{
+	for {
 		select {
 		case <- quit:
 			revel.INFO.Printf("%s", "Goroutine closed")
@@ -27,9 +23,8 @@ func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
 		case <- ticker.C:
 			frame := capture.QueryFrame()
 		
-			//эта штука не работает
 			//img := opencv.EncodeImage(".jpg", frame.ImageData(), 0)
-			//и эта
+			//
 			//size := frame.ImageSize()
 			//imgbuff := ((*[1 << 30]byte))(frame.ImageData())[:size]
 			//fmt.Println(size)
@@ -40,7 +35,7 @@ func StreamVideo(ws *websocket.Conn, quit chan struct{}) {
 			size := stats.Size()
 			imgbuf := make([]byte, 0)
 			chunkbuf := make([]byte, size)
-			for{
+			for {
 				_, err := img.Read(chunkbuf)
 				if err == io.EOF{
 					img.Close()

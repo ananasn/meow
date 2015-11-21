@@ -1,8 +1,25 @@
 package app
 
-import "github.com/revel/revel"
+import (
+	"github.com/revel/revel"
+	"github.com/lazywei/go-opencv/opencv"
+	"fmt"
+)
+
+
+var Capture = make(chan *opencv.Capture, 1)
+
+func GetCapture() chan *opencv.Capture {
+	return Capture
+}
 
 func init() {
+	
+	//Initialize camera
+	fmt.Println("Get capture")
+	Capture <- opencv.NewCameraCapture(0)
+	fmt.Println("Capture done")
+	
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.

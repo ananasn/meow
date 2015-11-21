@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"
-    "meow/app/streamcam"
-	"runtime"
+	"meow/app/streamcam"
+	"meow/app"
 )
 
 type WebSockApp struct {
@@ -20,11 +20,10 @@ func (c WebSockApp) Index() revel.Result {
 
 func (c WebSockApp) WebSockHandler(user string, ws *websocket.Conn) revel.Result {
 	defer ws.Close()
-	revel.INFO.Printf("Maxprocs: %d", runtime.GOMAXPROCS(0))
 	revel.INFO.Printf("%s", "WS request recieved")
 	newmessages := make(chan string)
 	quit := make(chan struct{})	
-	go streamcam.StreamVideo(ws, quit)
+	go streamcam.StreamVideo(ws, quit, app.GetCapture())
 	
 	go func() {
 		var msg string
@@ -39,7 +38,7 @@ func (c WebSockApp) WebSockHandler(user string, ws *websocket.Conn) revel.Result
 	}()
 	
 	for {
-		select{
+		select {
 		case msg := <- newmessages:
 			if msg == "" {
 				close(quit)
