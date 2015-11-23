@@ -1,5 +1,5 @@
 .video-stream{
-    position: relative;
+    position: absolute;
     width: 300;
     height: 250;
 }
@@ -62,4 +62,16 @@
     outline:none;
     position: absolute;
     left: 48%;
+}
+
+.drag-drop {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.workspace {
+    height:7000px;
+    width:100%;
+    clear:both;
 }

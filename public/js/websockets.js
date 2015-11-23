@@ -1,6 +1,7 @@
 window.onload = function(){
-    imgs = [];
     
+    initDragAndDrop()
+    imgs = [];
     streamWidget = document.getElementsByClassName("video-stream");
     
     for (var i = 0; i < streamWidget.length; i++) {
@@ -109,5 +110,56 @@ function removeDuplicatesAndMakeObj(images) {
             obj[imgAddr] = [images[i]];
     }
     return obj;
+}
+
+/**
+ * Dragstart event handler. The function counts offsets, gets element id and joins them in one string.
+ *
+ * @param event event object.
+ */
+function dragStart(event) {
+    var style = window.getComputedStyle(event.target, null);
+    event.dataTransfer.setData("text/plain", (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ','
+		+ (parseInt(style.getPropertyValue("top"),10) - event.clientY) + ',' + event.target.elementId);
+}
+
+/**
+ * Dragover event handler. The function cancels the event and allows to drop element.
+ *
+ * @param event event object.
+ */
+function dragOver(event) {
+    event.preventDefault();
+    return false;
+}
+
+/**
+ * Drop event handler. The function reads data from dataTransfer object and places the element.
+ *
+ * @param event event object.
+ * @return false.
+ */
+function drop(event) {
+    var data = event.dataTransfer.getData("text/plain").split(',');
+    i = data[2]
+    var drag_element = document.getElementsByClassName('drag-drop')[i];
+    drag_element.style.left = (event.clientX + parseInt(data[0],10)) + 'px';
+    drag_element.style.top = (event.clientY + parseInt(data[1],10)) + 'px';
+    event.preventDefault();
+    return false;
+}
+
+/**
+ * The method for initializing listeners for drag-and-drop events.
+ *
+ */
+function initDragAndDrop() {
+    var drag_elements = document.getElementsByClassName('drag-drop');
+    for (i = 0; i < drag_elements.length; ++i) {
+        drag_elements[i].elementId = i;
+        drag_elements[i].addEventListener('dragstart', dragStart, false);
+        document.body.addEventListener('dragover', dragOver, false);
+        document.body.addEventListener('drop', drop, false);
+    }
 }
 
