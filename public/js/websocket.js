@@ -1,21 +1,28 @@
 var socket;
 var mobileCheck;
+var PreviosInputStr="";
+
 window.onload = function(){
 init()
-if(typeof window.orientation !== 'undefined'){
-    document.onkeyup = keymonitor
-    mobileCheck = true
+if(typeof window.orientation !== 'undefined'){ //this property defined in mobile devs
+    document.onclick = function() {
+            f = document.getElementById("focus_for_keyboard");
+            f.focus()
+          };
+          document.onkeyup = keymonitor
+          mobileCheck = true
 }
 else {
     document.onkeydown = keymonitor
 }
-document.onclick = function() {
-        f = document.getElementById("focus_for_keyboard");
-        f.focus()
-      };
 }
 
 var getKeyCode = function (str) {
+    if (str == PreviosInputStr.slice(0, -1)){ //Checks if backspace was pressed
+        PreviosInputStr = str
+        return 8
+    }
+    PreviosInputStr = str
     return str.charCodeAt(str.length - 1);
 }
 
@@ -25,7 +32,6 @@ var getKeyCode = function (str) {
 function keymonitor(e) {
     res = e.keyCode
     if (res == 0 || res == 229) { //for android chrome keycode fix
-        alert(res)
            res = getKeyCode(document.getElementById("focus_for_keyboard").value)
      }
     else if (e.shiftKey && e.keyCode>=65 && e.keyCode<=90){ //A-Z
