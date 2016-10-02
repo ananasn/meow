@@ -1,25 +1,39 @@
 package app
 
 import (
-	"github.com/revel/revel"
-	"github.com/lazywei/go-opencv/opencv"
 	"fmt"
+	"meow/app/webterm"
+
+	"github.com/lazywei/go-opencv/opencv"
+	"github.com/revel/revel"
+	"github.com/tarm/serial"
 )
 
-
 var Capture = make(chan *opencv.Capture, 1)
+
+var PortTerminal *serial.Port
+var AddrHTTP string
+var PortHTTP string
 
 func GetCapture() chan *opencv.Capture {
 	return Capture
 }
 
 func init() {
-	
+
 	//Initialize camera
 	fmt.Println("Get capture")
 	Capture <- opencv.NewCameraCapture(0)
 	fmt.Println("Capture done")
-	
+
+	//Open serial connection
+	port, err := webterm.StartSerial("/dev/cu.SLAB_USBtoUART", 115200)
+	if err != nil {
+		fmt.Println("Can'n open serial connection!")
+	} else {
+		fmt.Println("Serial connection is opened")
+		PortTerminal = port
+	}
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.
@@ -40,6 +54,14 @@ func init() {
 	// ( order dependent )
 	// revel.OnAppStart(InitDB)
 	// revel.OnAppStart(FillCache)
+	revel.OnAppStart(func() {
+		var found bool = false
+		AddrHTTP, found = revel.Config.String("http.addr")
+		PortHTTP, found = revel.Config.String("http.port")
+		if !found {
+			panic("http.addr or http.port are not defined in the config section")
+		}
+	})
 }
 
 // TODO turn this into revel.HeaderFilter
