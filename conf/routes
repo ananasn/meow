@@ -5,7 +5,13 @@
 module:testrunner
 
 GET	/					WebSockApp.Index
+GET	/stream-widget.html			WebSockApp.StreamWidget
+GET	/axis-movements-widget.html		WebSockApp.AxisMovementsWidget
+GET	/coordinates-info.html			WebSockApp.CoordInfoWidget
+GET	/g-code-widget.html			WebSockApp.GCodeWidget
 WS	/ws					WebSockApp.WebSockHandler
+WS	/ws_axis_move				WebSockApp.AxisMovementWidgetWebSocket
+WS	/ws_terminal				WebSockApp.TerminalHendler
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

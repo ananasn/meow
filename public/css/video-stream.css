@@ -4,6 +4,12 @@
     height: 250;
 }
 
+.stream-frame{
+    position: absolute;
+    width: 300;
+    height: 250;
+}
+
 .panel-bottom {
     position: absolute;
     bottom: 0px;
@@ -67,11 +73,111 @@
 .drag-drop {
     position: absolute;
     left: 0;
-    top: 0;
+    top: 0;-352,-1,0
 }
 
-.workspace {
-    height:7000px;
-    width:100%;
-    clear:both;
+#workspace { 
+	-webkit-transition-duration: 0.5s;
+    height: 100%;
+    width :100%;
+	-webkit-transform:translateX(50px);
+    /*clear: both;*/
+}
+
+.cmd{
+	position: absolute;
+    width: 300;
+    height: 250;
+	background: rgba(0, 0, 0, 0.9);
+	color: white;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 10px solid rgba(0, 0, 0, 0);
+}
+
+.cmd-input{
+	position: absolute;-353,-253,0
+    width: inherit;
+    height: inherit;
+	font-family: monospace;
+	line-height: 0.2em;
+	background: rgba(0, 0, 0, 0);
+	border: 1px solid rgba(0, 0, 0, 0);
+	color: white;
+}
+
+.cmd-input:focus {
+	outline: none;
+ 	color: white;
+ 	border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.cmd-header {
+	color: white;
+	font-size: 80%;
+	font-family: monospace;
+	line-height: 0.2em;
+	border-bottom: 1px solid white;
+}
+p {
+	 color: inherit; 
+	 font-family: monospace;
+	 width: inherit;
+	 font-size: inherit;
+	 text-align: inherit;
+}
+
+#menu {
+	/*display:none;*/
+	/*left: 320px;*/
+	-webkit-transition-duration: 0.5s;
+	float: left;
+	transform: translateX(-300px);
+	-webkit-transform:translateX(-300px);
+	width: 350;
+	/*left: -300;*/
+	height: 100%;
+	background-color:#009688 ;
+}
+.menu-item {
+    padding: 10px;
+}
+
+#content {
+	box-shadow:  inset  0 1px 10px rgba(0,0,0,0.30), 0 1px 1px rgba(0,0,0,0.22);
+	left: -300;
+	width: 300;
+	height: 100%;
+	background-color: #00796B ;
+}
+#menu-btn {
+	position: absolute;
+	top:10;
+	left: 310;
+	/*left: -300;*/
+	border-bottom: 18px double #B2DFDB;
+	border-top: 6px solid #B2DFDB;
+	height: 5px;
+	width: 30px
+}
+iframe {
+	position: absolute;
+	left:0;
+	top:0;
+	
+}
+img{ 
+	margin: auto;
+	display: block;
+}
+
+body {    
+    margin: 0 !important;
+}
+
+.axis-movements-widget {
+	position: absolute;
+    width: 700;
+    height: 700;
 }

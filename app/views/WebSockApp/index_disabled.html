@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Websocket test, nyan</title>
+    </head>
+    <body>
+        <link rel="stylesheet" href="/public/css/video-stream.css" type="text/css"></link>
+		<script src="/public/js/main-init.js" type="text/javascript"></script>
+		<script src="/public/js/hammer.min.js"></script>
+		<div id="menu">
+			<div id="menu-btn" onclick="menuShow()">
+			</div>
+			<div id="content" style="overflow-y:scroll;">
+				<div class="menu-item" onclick="addAxisMovementsWidget()">
+					<img id ="axis-widget-icon" src="/public/img/axis.png" alt="stream-widget" width = "150">
+				</div>
+				<div class="menu-item" onclick="addCoordInfoWidget()">
+					<img id ="onfo-widget-icon" src="/public/img/info.png" alt="stream-widget" width = "150">
+				</div>
+				<div class="menu-item" onclick="addGCodeWidget()">
+					<img id ="onfo-widget-icon" src="/public/img/gcode.png" alt="stream-widget" width = "150">
+				</div>
+                <div class="menu-item" onclick="addStreamWidget()">
+					<img id ="stream-widget-icon" src="/public/img/stream.png" alt="stream-widget" width = "150">
+				</div>
+			</div>
+		</div>
+		<div id="workspace">
+		</div>
+    </body>
+</html>

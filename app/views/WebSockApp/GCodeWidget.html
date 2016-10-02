@@ -1,0 +1,56 @@
+<body>
+	<link rel="stylesheet" href="/public/css/g-code-widget.css" type="text/css"></link>
+    <script src="/public/js/main-init.js" type="text/javascript"></script>
+	<div id = "g-code-widget" class = "drag-drop" host="{{.host}}" port="{{.port}}"
+     draggable="true">
+        <div id="program_space">
+            <p>O1000</p>
+            <p>T1 M6</p>
+            <p>G0 G90 G40 G21 G17 G94 G80</p>
+            <p>G54 X-75 Y-25 S500 M3  (Start Point)</p>
+            <p>G43 Z100 H1</p>
+            <p>Z5</p>
+            <p>G1 Z-20 F100</p>
+            <p>X-50 M8               (Position 1)</p>
+            <p>Y0                    (Position 2)</p>
+            <p>X0 Y50                (Position 3)</p>
+            <p>X50 Y0                (Position 4)</p>
+            <p>X0 Y-50               (Position 5)</p>
+            <p>X-50 Y0               (Position 6)</p>
+            <p>Y25                   (Position 7)</p>
+            <p>X-75                  (Position 8)</p>
+            <p>G0 Z100</p>
+            <p>M30</p>
+        </div>
+        <div id = "nums">
+            <p>0</p>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+            <p>5</p>
+            <p>6</p>
+            <p>7</p>
+            <p>8</p>
+            <p>9</p>
+            <p>10</p>
+            <p>11</p>
+            <p>12</p>
+            <p>13</p>
+            <p>13</p>
+            <p>14</p>
+            <p>15</p>
+        <div>
+        <div id="btn-panel">
+        <div id="load-btn" class="btn">
+            Load
+        </div>
+        <div id="start-btn" class="btn" onClick="startProgram();">
+            Start
+        </div>
+        <div id="stop-btn" class="btn" onClick="stop();">
+            Stop
+        </div>
+    </div>
+	</div>
+</body>
