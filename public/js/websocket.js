@@ -1,12 +1,22 @@
 var socket;
-
+var mobileCheck;
 window.onload = function(){
 init()
-document.onkeyup = keymonitor
+if(typeof window.orientation !== 'undefined'){
+    document.onkeyup = keymonitor
+    mobileCheck = true
+}
+else {
+    document.onkeydown = keymonitor
+}
 document.onclick = function() {
         f = document.getElementById("focus_for_keyboard");
         f.focus()
       };
+}
+
+var getKeyCode = function (str) {
+    return str.charCodeAt(str.length - 1);
 }
 
 /**
@@ -14,7 +24,11 @@ document.onclick = function() {
  */
 function keymonitor(e) {
     res = e.keyCode
-    if (e.shiftKey && e.keyCode>=65 && e.keyCode<=90){ //A-Z
+    if (res == 0 || res == 229) { //for android chrome keycode fix
+        alert(res)
+           res = getKeyCode(document.getElementById("focus_for_keyboard").value)
+     }
+    else if (e.shiftKey && e.keyCode>=65 && e.keyCode<=90){ //A-Z
          res = e.keyCode
     }
     else if (e.keyCode>=65 && e.keyCode<=90){ //a-z

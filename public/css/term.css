@@ -134,4 +134,5 @@
 #focus_for_keyboard{
     opacity:0;
     position: absolute;
+    bottom:0;
 }
