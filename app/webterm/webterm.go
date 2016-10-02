@@ -24,6 +24,8 @@ var Doc *html.Node = nil              // contains tree of html pattern after HTM
 var NewLineChan = make(chan struct{}) // channel, throught that command "move to new line" can be sent
 var rowCurrent int = rowsDefault      // number of the latest line; increments if current position is close to rowsDefault
 var row, col = 0, 0                   // current cursor position
+var fg = "default"                    // current foregroung color
+var bg = "default"                    // current background color
 var re_html = regexp.MustCompile(`<tbody[\s\S]*</tbody>`)
 var re = regexp.MustCompile(`(\x1b\[[\d{0,3};{0,1}]{0,3}[a-zA-Z]|\x0d\x0a)`)
 var regMap = map[string]func(string, *html.Node){
@@ -38,6 +40,17 @@ var regMap = map[string]func(string, *html.Node){
 	`\x1b\[\d{0,3}B`:            SetCursDown,
 	`\x1b\[\d{0,3}D`:            SetCursBack,
 	`\x1b\[\d{0,3}C`:            SetCursFow,
+}
+var colorMap = map[string]string{
+	`\x1b\[[34]0m`:  "black",
+	`\x1b\[[34]1m`:  "red",
+	`\x1b\[[34]2dm`: "green",
+	`\x1b\[[34]3dm`: "yellow",
+	`\x1b\[[34]4m`:  "blue",
+	`\x1b\[[34]5m`:  "magenta",
+	`\x1b\[[34]6m`:  "cyan",
+	`\x1b\[[34]7m`:  "white",
+	`\x1b\[[34]9m`:  "default",
 }
 
 type TextArr []string
@@ -199,7 +212,7 @@ func setCursorToPos(row int, col int, Doc *html.Node) (ok bool) {
 	return true
 }
 
-// Sets text to current position.
+// Sets text to current position and set bg and fg colors.
 func setTextToCurrentPos(text string, Doc *html.Node) (ok bool) {
 	for _, letter := range text { // Add text node to cursor position if it doesn't have any
 		_, p, ok := getCursor(Doc)
@@ -211,6 +224,11 @@ func setTextToCurrentPos(text string, Doc *html.Node) (ok bool) {
 		for c := p.FirstChild; c != nil; c = c.NextSibling {
 			if c.Type == html.TextNode {
 				c.Data = string(letter)
+				var attr html.Attribute
+				attr.Key = "class"
+				attr.Val = fmt.Sprintf("%v %v", fg, bg)
+				p.Attr = append(p.Attr, attr)
+				fmt.Println("Set Colors class")
 				found = true
 			}
 		}
@@ -219,6 +237,11 @@ func setTextToCurrentPos(text string, Doc *html.Node) (ok bool) {
 			textNode.Type = html.TextNode
 			textNode.Data = string(letter)
 			p.AppendChild(&textNode)
+			var attr html.Attribute
+			attr.Key = "class"
+			attr.Val = fmt.Sprintf("%v %v", fg, bg)
+			fmt.Println("Set Colors class")
+			p.Attr = append(p.Attr, attr)
 		}
 		col += 1
 		setCursorToPos(row, col, Doc)
@@ -228,7 +251,7 @@ func setTextToCurrentPos(text string, Doc *html.Node) (ok bool) {
 }
 
 // Creates the iterator, that iterates over string array,
-// that was obtained by spliting input string at esc characters.
+// obtained by spliting input string at esc characters.
 func (s TextArr) Next() func() string {
 	i := 0
 	return func() string {
@@ -270,14 +293,30 @@ func EscStringToHTML(s string) string {
 // Set of functions for each escape sequense type
 
 func SetForColor(s string, Doc *html.Node) {
+	for key, value := range colorMap {
+		re := regexp.MustCompile(key)
+		if re.MatchString(s) {
+			fg = fmt.Sprintf("%v-fg", value)
+			break
+		}
+	}
 	fmt.Println("SetFontColor()")
 }
 
 func SetBgColor(s string, Doc *html.Node) {
+	for key, value := range colorMap {
+		re := regexp.MustCompile(key)
+		if re.MatchString(s) {
+			bg = fmt.Sprintf("%v-bg", value)
+			break
+		}
+	}
 	fmt.Println("SetBgColor()")
 }
 
 func ResetFormat(s string, Doc *html.Node) {
+	fg = "default"
+	bg = "default"
 	fmt.Println("ResetFormat()")
 }
 

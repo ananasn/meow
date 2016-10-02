@@ -27,100 +27,100 @@
      z-index: 1;
 }
 .black-bg{
-    background:black;
+    background:black !important;
 }
 .red-bg{
-    background:red;
+    background:red !important;
 }
 .green-bg{
-    background:green;
+    background:green !important;
 }
 .yellow-bg{
-    background:yellow;
+    background:yellow !important;
 }
 .blue-bg{
-    background:blue;
+    background:blue !important;
 }
 .magenta-bg{
-    background:magenta;
+    background:magenta !important;
 }
 .cyan-bg{
-    background:cyan;
+    background:cyan !important;
 }
 .lightgray-bg{
-    background:lightgray;
+    background:lightgray !important;
 }
 .darkgray-bg{
-    background:darkgrey;
+    background:darkgrey !important;
 }
 .lightred-bg{
-    background:orangered;
+    background:orangered !important;
 }
 .lightgreen-bg{
-    background:lightgreen;
+    background:lightgreen !important;
 }
 .lightyellow-bg{
-    background:lightyellow;
+    background:lightyellow !important;
 }
 .lightblue-bg{
-    background:lightblue;
+    background:lightblue !important;
 }
 .lightmagenta-bg{
-    background:violet;
+    background:violet !important;
 }
 .lightcyan-bg{
-    background:lightcyan;
+    background:lightcyan !important;
 }
 .white-bg{
-    background:white;
+    background:white !important;
 }
 .black-fg{
-    color:black;
+    color:black !important;
 }
 .red-fg{
-    color:red;
+    color:red !important;
 }
 .green-fg{
-    color:green;
+    color:green !important;
 }
 .yellow-fg{
-    color:yellow;
+    color:yellow !important;
 }
 .blue-fg{
-    color:blue;
+    color:blue !important;
 }
 .magenta-fg{
-    color:magenta;
+    color:magenta !important;
 }
 .cyan-fg{
-    color:cyan;
+    color:cyan !important;
 }
 .lightgray-fg{
-    color:lightgray;
+    color:lightgray !important;
 }
 .darkgray-fg{
-    color:darkgrey;
+    color:darkgrey !important;
 }
 .lightred-fg{
-    color:orangered;
+    color:orangered !important;
 }
 .lightgreen-fg{
-    color:lightgreen;
+    color:lightgreen !important;
 }
 .lightyellow-fg{
-    color:lightyellow;
+    color:lightyellow !important;
 }
 .lightblue-fg{
-    color:lightblue;
+    color:lightblue !important;
 }
 .lightmagenta-fg{
-    color:violet;
+    color:violet !important;
 }
 .lightcyan-fg{
-    color:lightcyan;
+    color:lightcyan !important;
 }
 .white-fg{
-    color:white;
+    color:white !important;
 }
 .cursor{
     position: absolute;
