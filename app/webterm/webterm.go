@@ -228,7 +228,7 @@ func setTextToCurrentPos(text string, Doc *html.Node) (ok bool) {
 				attr.Key = "class"
 				attr.Val = fmt.Sprintf("%v %v", fg, bg)
 				p.Attr = append(p.Attr, attr)
-				fmt.Println("Set Colors class")
+				fmt.Printf("Set Colors class fg %v bg %v\n", fg, bg)
 				found = true
 			}
 		}
@@ -240,13 +240,13 @@ func setTextToCurrentPos(text string, Doc *html.Node) (ok bool) {
 			var attr html.Attribute
 			attr.Key = "class"
 			attr.Val = fmt.Sprintf("%v %v", fg, bg)
-			fmt.Println("Set Colors class")
+			fmt.Printf("Set Colors class fg %v bg %v\n", fg, bg)
 			p.Attr = append(p.Attr, attr)
 		}
 		col += 1
 		setCursorToPos(row, col, Doc)
 	}
-	fmt.Printf("setTextToCurrentPos() %v%v %v\n", text, row, col)
+	fmt.Printf("setTextToCurrentPos() %v %v %v\n", text, row, col-1)
 	return true
 }
 
@@ -330,7 +330,6 @@ func Erase(s string, Doc *html.Node) {
 			n.FirstChild.Data = ""
 		}
 	}
-	//setCursorToPos(row, col, Doc)
 	fmt.Println("Erase()")
 }
 
@@ -364,7 +363,10 @@ func SetCursPos(s string, Doc *html.Node) {
 }
 
 func SetCursUp(s string, Doc *html.Node) {
-	offset, _ := strconv.Atoi(string(s[2 : len(s)-1]))
+	offset, err := strconv.Atoi(string(s[2 : len(s)-1]))
+	if err != nil {
+		offset = 1
+	}
 	if row = row - offset; row < 0 {
 		row = 0
 	}
@@ -373,7 +375,10 @@ func SetCursUp(s string, Doc *html.Node) {
 }
 
 func SetCursDown(s string, Doc *html.Node) {
-	offset, _ := strconv.Atoi(string(s[2 : len(s)-1])) //TODO: Change to something more appropriate
+	offset, err := strconv.Atoi(string(s[2 : len(s)-1]))
+	if err != nil {
+		offset = 1
+	}
 	if row = row + offset; row > rowCurrent {
 		fmt.Println("SetCursDown) Overflow col")
 	}
@@ -382,46 +387,52 @@ func SetCursDown(s string, Doc *html.Node) {
 }
 
 func SetCursBack(s string, Doc *html.Node) {
-	offset, _ := strconv.Atoi(string(s[2 : len(s)-1]))
+	offset, err := strconv.Atoi(string(s[2 : len(s)-1]))
+	if err != nil {
+		offset = 1
+	}
+	fmt.Printf("before SetCursBack() col %v\n", col)
 	if col = col - offset; col < 0 {
 		col = 0
 	}
 	setCursorToPos(row, col, Doc)
-	fmt.Println("SetCursBack()")
+	fmt.Printf("SetCursBack() col %v\n", col)
 }
 
 func SetCursFow(s string, Doc *html.Node) {
-	offset, _ := strconv.Atoi(string(s[2 : len(s)-1]))
+	offset, err := strconv.Atoi(string(s[2 : len(s)-1]))
+	if err != nil {
+		offset = 1
+	}
 	if col = col + offset; col > colMax { //TODO: Change to something more appropriate
 		fmt.Println("SetCursFow() Overflow row")
 		NewLineChan <- struct{}{}
 		return
 	}
 	setCursorToPos(row, col, Doc)
-	fmt.Println("SetCursFow()")
+	fmt.Printf("SetCursFow() col %v\n", col)
 }
 
 func SetCursToNewLine(s string, Doc *html.Node) {
 	fmt.Println("SetCursToNewLine()")
+	row += 1
+	col = 0
+	setCursorToPos(row, col, Doc)
 	if row == rowCurrent-2 {
-
-		//Copy last <tr> in newNode
+		//Create new <tr>
 		var newNode html.Node
 		newNode.Type = html.ElementNode
 		newNode.Data = "tr"
-		//Add childs to newNode
+		//Add <td> to <tr>
 		fmt.Printf("Add childs to newNode")
 		for c := 0; c <= colMax; c++ {
-			fmt.Println("Set Child!")
 			var newChild html.Node
 			newChild.Type = html.ElementNode
 			newChild.Data = "td"
 			var attr html.Attribute
 			newChild.Attr = append(newChild.Attr, attr)
 			newChild.Attr[0].Key = "id"
-			//fmt.Println(string(rowCurrent+1) + "_" + strings.Split(a.Val, "_")[1])
 			newChild.Attr[0].Val = fmt.Sprintf("%v_%v", rowCurrent+1, c)
-			fmt.Println(fmt.Sprintf("%v_%v", rowCurrent+1, c))
 			newNode.AppendChild(&newChild)
 
 		}
@@ -429,9 +440,6 @@ func SetCursToNewLine(s string, Doc *html.Node) {
 		fmt.Println(p.Parent.Parent.Data)
 		p.Parent.Parent.AppendChild(&newNode)
 		rowCurrent += 1
-		fmt.Println("SetCursToNewLine() Overflow col")
+		fmt.Println("SetCursToNewLine() Increments rows nummber")
 	}
-	row += 1
-	col = 0
-	setCursorToPos(row, col, Doc)
 }

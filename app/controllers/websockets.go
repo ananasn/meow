@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"meow/app"
 	"meow/app/streamcam"
 	"meow/app/webterm"
@@ -128,7 +127,6 @@ func (c WebSockApp) TerminalHendler(user string, ws *websocket.Conn) revel.Resul
 				str, err := webterm.SerialRead(app.PortTerminal)
 				if err == nil {
 					res := webterm.EscStringToHTML(str)
-					fmt.Printf(res[len(res)-50 : len(res)-1])
 					websocket.Message.Send(ws, res)
 				}
 			}
